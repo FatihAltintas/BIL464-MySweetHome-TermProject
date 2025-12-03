@@ -3,18 +3,19 @@
 
 #include "Device.h"
 
-// Guvenlik kamerasini temsil eden sinif
+// Güvenlik kamerasını temsil eden sınıf
 class Camera : public Device {
 public:
-    Camera(const std::string& n, int i)
-        : Device(n, i) {}
+    Camera(const string& n)
+        : Device(n) {}
 
     virtual Device* clone() const override {
         return new Camera(*this);
     }
 
-    // Ileride FPS, aci, cozunurluk vb. ozellikler eklenebilir
+    virtual void operate() override {
+        cout << "[Camera] " << name << " is recording." << endl;
+    }
 };
 
 #endif
-
