@@ -1,12 +1,8 @@
 #ifndef MODE_MANAGER_H
 #define MODE_MANAGER_H
 
-#include <string>
-#include <vector>
-#include <iostream>
 #include "DeviceManager.h"
 
-// Mod tipleri (REQ7)
 enum ModeType {
     MODE_NORMAL,
     MODE_NIGHT,
@@ -14,7 +10,7 @@ enum ModeType {
     MODE_CINEMA
 };
 
-inline std::string modeToString(ModeType m) {
+inline string modeToString(ModeType m) {
     switch (m) {
         case MODE_NORMAL: return "Normal";
         case MODE_NIGHT:  return "Night";
@@ -24,43 +20,39 @@ inline std::string modeToString(ModeType m) {
     }
 }
 
+// REQ7: Mod yönetimi
 class ModeManager {
     ModeType currentMode;
 
 public:
     ModeManager() : currentMode(MODE_NORMAL) {}
 
-    ModeType getCurrentMode() const {
-        return currentMode;
-    }
-
-    std::string getModeName() const {
-        return modeToString(currentMode);
-    }
+    ModeType getCurrentMode() const { return currentMode; }
+    string getModeName() const { return modeToString(currentMode); }
 
     void setMode(ModeType m, DeviceManager& dm) {
         if (m == currentMode) {
-            std::cout << "  Zaten bu moddasiniz: " << getModeName() << std::endl;
+            cout << "  Zaten bu moddasiniz: " << getModeName() << endl;
             return;
         }
         currentMode = m;
         applyMode(dm);
-        std::cout << "  Mod degistirildi: " << getModeName() << std::endl;
+        cout << "  Mod degistirildi: " << getModeName() << endl;
     }
 
-    // REQ7: Modlara gore davranis
+    // Cihaz davranışları modlara göre
     void applyMode(DeviceManager& dm) {
-        const std::vector<Device*>& devs = dm.getDevices();
+        const vector<Device*>& devs = dm.getDevices();
 
         for (size_t i = 0; i < devs.size(); ++i) {
             Device* d = devs[i];
-            std::string n = d->getName();
+            string n = d->getName();
 
             if (currentMode == MODE_NORMAL) {
-                // Normal: kullanicinin biraktigi gibi
+                // Kullanıcının bıraktığı gibi kalsın
             }
             else if (currentMode == MODE_NIGHT) {
-                // Night: sadece LivingRoomLight acik kalsin
+                // Night: sadece LivingRoomLight ACTIVE olsun
                 if (n == "LivingRoomLight") {
                     d->powerOn();
                 } else {
@@ -68,12 +60,12 @@ public:
                 }
             }
             else if (currentMode == MODE_PARTY) {
-                // Party: tum cihazlari ac
+                // Party: tüm cihazlar ACTIVE
                 d->powerOn();
             }
             else if (currentMode == MODE_CINEMA) {
-                // Cinema: sadece TV acik kalsin
-                if (n.find("TV") != std::string::npos) {
+                // Cinema: sadece TV'ler ACTIVE
+                if (n.find("TV") != string::npos) {
                     d->powerOn();
                 } else {
                     d->powerOff();
@@ -84,4 +76,3 @@ public:
 };
 
 #endif
-
