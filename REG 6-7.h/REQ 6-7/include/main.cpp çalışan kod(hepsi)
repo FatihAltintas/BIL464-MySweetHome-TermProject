@@ -1,1 +1,255 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+
+
+
+class IObserver {
+public:
+    virtual ~IObserver() {}
+    virtual void update(class Device* device) = 0;
+};
+
+enum DeviceState { ACTIVE, INACTIVE, FAILED };
+
+class Device {
+protected:
+    string name;
+    int id;
+    DeviceState state;
+    vector<IObserver*> observers;
+
+public:
+    Device(const string& n) : name(n), id(0), state(INACTIVE) {}
+    virtual ~Device() {}
+
+    virtual Device* clone() const = 0;
+    virtual void operate() = 0;
+
+    virtual void copyConfigFrom(const Device* other) {
+        if (other) {
+            this->name = other->name;
+            cout << "[LOG] Config copied from " << other->name << endl;
+        }
+    }
+
+    virtual void powerOn() {
+        if (state != FAILED) {
+            state = ACTIVE;
+            cout << name << " is ON.\n";
+            notifyObservers();
+        }
+    }
+
+    virtual void powerOff() {
+        if (state != FAILED) {
+            state = INACTIVE;
+            cout << name << " is OFF.\n";
+            notifyObservers();
+        }
+    }
+
+    void setState(DeviceState newState) {
+        state = newState;
+        notifyObservers();
+    }
+
+    DeviceState getState() const { return state; }
+    string getName() const { return name; }
+    int getId() const { return id; }
+    void setId(int newId) { id = newId; }
+
+    void attach(IObserver* o) { observers.push_back(o); }
+    void notifyObservers() {
+        for (auto* o : observers) o->update(this);
+    }
+};
+
+
+
+class Light : public Device {
+public:
+    Light(const string& n) : Device(n) {}
+
+    Device* clone() const override { return new Light(*this); }
+
+    void operate() override {
+        cout << "[Light] Operating...\n";
+    }
+};
+
+class TV : public Device {
+public:
+    TV(const string& n) : Device(n) {}
+
+    Device* clone() const override { return new TV(*this); }
+
+    void operate() override {
+        cout << "[TV] Operating...\n";
+    }
+};
+
+class Camera : public Device {
+public:
+    Camera(const string& n) : Device(n) {}
+
+    Device* clone() const override { return new Camera(*this); }
+
+    void operate() override {
+        cout << "[Camera] Recording...\n";
+    }
+};
+
+class Alarm : public Device {
+public:
+    Alarm(const string& n) : Device(n) {
+        state = ACTIVE; // Alarm varsayılan açık
+    }
+
+    Device* clone() const override { return new Alarm(*this); }
+
+    void operate() override {
+        cout << "[Alarm] Monitoring...\n";
+    }
+
+    void powerOff() override {
+        cout << name << " cannot be turned OFF by user!\n";
+    }
+};
+
+
+
+class DeviceManager : public IObserver {
+    vector<Device*> devices;
+    int nextId = 1;
+
+public:
+    DeviceManager() {}
+
+    ~DeviceManager() {
+        for (auto* d : devices) delete d;
+    }
+
+    Device* registerDevice(Device* d) {
+        d->setId(nextId++);
+        d->attach(this);
+        devices.push_back(d);
+        return d;
+    }
+
+    Device* addLight(const string& n) { return registerDevice(new Light(n)); }
+    Device* addTV(const string& n)    { return registerDevice(new TV(n)); }
+    Device* addCamera(const string& n){ return registerDevice(new Camera(n)); }
+    Device* addAlarm(const string& n) { return registerDevice(new Alarm(n)); }
+
+    Device* findById(int id) {
+        for (auto* d : devices)
+            if (d->getId() == id) return d;
+        return NULL;
+    }
+
+    void powerOnDevice(int id) {
+        auto* d = findById(id);
+        if (!d) return;
+        d->powerOn();
+    }
+
+    void powerOffDevice(int id) {
+        auto* d = findById(id);
+        if (!d) return;
+        d->powerOff();
+    }
+
+    void listDevices() {
+        for (auto* d : devices) {
+            cout << "[" << d->getId() << "] "
+                 << d->getName() << " : "
+                 << (d->getState() == ACTIVE ? "ACTIVE" :
+                     d->getState() == INACTIVE ? "INACTIVE" : "FAILED")
+                 << endl;
+        }
+    }
+
+    void update(Device* d) override {
+        cout << "[OBS] " << d->getName()
+             << " changed state.\n";
+    }
+
+    const vector<Device*>& getDevices() const { return devices; }
+};
+
+
+
+enum ModeType { MODE_NORMAL, MODE_NIGHT, MODE_PARTY, MODE_CINEMA };
+
+string modeToString(ModeType m) {
+    switch (m) {
+        case MODE_NORMAL: return "Normal";
+        case MODE_NIGHT: return "Night";
+        case MODE_PARTY: return "Party";
+        case MODE_CINEMA: return "Cinema";
+    }
+    return "Unknown";
+}
+
+class ModeManager {
+    ModeType mode = MODE_NORMAL;
+
+public:
+    ModeType getMode() const { return mode; }
+
+    void setMode(ModeType m, DeviceManager& dm) {
+        mode = m;
+        applyMode(dm);
+        cout << "Mode changed to " << modeToString(m) << endl;
+    }
+
+    void applyMode(DeviceManager& dm) {
+        for (auto* d : dm.getDevices()) {
+            if (mode == MODE_NIGHT) {
+                if (d->getName().find("Light") != string::npos)
+                    d->powerOn();
+                else
+                    d->powerOff();
+            }
+            else if (mode == MODE_PARTY) {
+                d->powerOn();
+            }
+            else if (mode == MODE_CINEMA) {
+                if (d->getName().find("TV") != string::npos)
+                    d->powerOn();
+                else
+                    d->powerOff();
+            }
+        }
+    }
+};
+
+
+
+int main() {
+    DeviceManager dm;
+    ModeManager mm;
+
+    dm.addLight("LivingRoomLight");
+    dm.addTV("MainTV");
+    dm.addCamera("DoorCam");
+    dm.addAlarm("MainAlarm");
+
+    cout << "--- HOME STATUS ---\n";
+    dm.listDevices();
+
+    cout << "\nPowering ON TV...\n";
+    dm.powerOnDevice(2);
+
+    cout << "\nChanging mode to NIGHT...\n";
+    mm.setMode(MODE_NIGHT, dm);
+
+    cout << "\nFinal Status:\n";
+    dm.listDevices();
+
+    return 0;
+}
 
