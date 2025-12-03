@@ -3,18 +3,20 @@
 
 #include <string>
 #include <vector>
+#include "Device.h" 
 
 class HomeMemento {
 private:
     std::string stateName;
-    std::vector<bool> deviceStates; 
+   
+    std::vector<DeviceState> deviceStates; 
 
 public:
-    HomeMemento(const std::string& name, const std::vector<bool>& states) 
+    HomeMemento(const std::string& name, const std::vector<DeviceState>& states) 
         : stateName(name), deviceStates(states) {}
 
     std::string getStateName() const { return stateName; }
-    std::vector<bool> getDeviceStates() const { return deviceStates; }
+    std::vector<DeviceState> getDeviceStates() const { return deviceStates; }
 };
 
 #endif

@@ -6,19 +6,27 @@
 class Light : public Device {
 private:
     int brightness;
-    std::string color;
+    string color;
 
 public:
-    Light(const std::string& n, int i) : Device(n, i), brightness(100), color("White") {}
+    
+    Light(const string& n, int i) : Device(n), brightness(100), color("White") {
+        setId(i);
+    }
 
-    virtual Device* clone() const {
+    
+    Device* clone() const {
         return new Light(*this);
+    }
+
+    void operate() {
+        cout << "[Light] Operating... (Lighting up the room)" << endl;
     }
 
     void setBrightness(int b) { brightness = b; }
     
     void showInfo() const {
-        std::cout << "   -> Light Info: Color=" << color << ", Brightness=" << brightness << "%" << std::endl;
+        cout << "   -> Light Info: Color=" << color << ", Brightness=" << brightness << "%" << endl;
     }
 };
 
