@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.10)
+project(MySweetHome)
+
+# C++98 Standardını zorunlu kılıyoruz 
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Include klasörünü tanıtıyoruz
+include_directories(include)
+
+set(SOURCES
+    src/main.cpp
+    src/Device.cpp
+    src/Light.cpp
+    src/Camera.cpp   
+    src/Detector.cpp  
+    src/TV.cpp        
+    src/SystemManager.cpp 
+)
+
+add_executable(MSH ${SOURCES})
