@@ -1,0 +1,5 @@
+[2025-12-02 20:27:13] System initialized.
+[2025-12-02 20:27:13] Factory created a new Smoke Detector (ID: 101)
+[2025-12-02 20:27:13] SECURITY WARNING: User tried to turn off Smoke Detector! Operation blocked.
+[2025-12-02 20:27:13] Light turned ON: Salon Isigi
+[2025-12-02 20:27:13] Light turned ON: Salon Isigi
