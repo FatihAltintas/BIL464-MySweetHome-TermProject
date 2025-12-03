@@ -3,21 +3,22 @@
 
 #include "Device.h"
 
-// Light cihazini temsil eden sinif
+// Light cihazını temsil eden sınıf
 class Light : public Device {
 public:
-    // Kurucu fonksiyon: isim ve ID alir, base class'a gecer
-    Light(const std::string& n, int i)
-        : Device(n, i) {}
+    // Sadece isim alıyoruz, ID sonradan DeviceManager tarafından set edilir
+    Light(const string& n)
+        : Device(n) {}
 
-    // Prototype pattern: bu nesnenin kopyasini uretir
+    // Prototype pattern
     virtual Device* clone() const override {
         return new Light(*this);
     }
 
-    // Istersek ileride Light'a ozel davranis ekleyebiliriz
-    // (su an icin Device'in powerOn/powerOff fonksiyonlarini kullaniyoruz)
+    // Cihaza özgü davranış (örnek)
+    virtual void operate() override {
+        cout << "[Light] " << name << " is operating." << endl;
+    }
 };
 
 #endif
-
