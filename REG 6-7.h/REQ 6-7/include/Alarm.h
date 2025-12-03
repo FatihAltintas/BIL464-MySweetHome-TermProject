@@ -3,24 +3,28 @@
 
 #include "Device.h"
 
-// Alarm cihazini temsil eden sinif
+// Alarm cihazını temsil eden sınıf
 class Alarm : public Device {
 public:
-    // Alarm varsayilan olarak ON baslayabilir
-    Alarm(const std::string& n, int i)
-        : Device(n, i) {
-        isActive = true;   // Sistem acilir acilmaz aktif
+    Alarm(const string& n)
+        : Device(n) {
+        // Sistem açıldığında alarm inaktif, istersen ACTIVE yapabilirsin
+        // state = ACTIVE;
     }
 
     virtual Device* clone() const override {
         return new Alarm(*this);
     }
 
-    // Alarm kullanici tarafindan kapatilamaz (REQ6 ozel durumu)
+    virtual void operate() override {
+        cout << "[Alarm] " << name << " is monitoring." << endl;
+    }
+
+    // Kullanıcı tarafından kapatılamasın (REQ6 özel durum)
     virtual void powerOff() override {
-        std::cout << name << " cannot be turned OFF by user!" << std::endl;
+        cout << name << " cannot be turned OFF by user!" << endl;
+        // state aynı kalır, notify yok
     }
 };
 
 #endif
-
