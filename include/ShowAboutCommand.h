@@ -18,7 +18,7 @@ public:
         std::cout << "ELMAR OSMANOV" << std::endl;
 
         std::cout << "\nAna menuye donmek icin [Enter] tusuna basin...";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.ignore(10000, '\n');
         std::cin.get();
     }
 
