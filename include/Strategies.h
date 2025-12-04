@@ -3,37 +3,29 @@
 
 #include <iostream>
 #include <string>
+
 using namespace std;
 
-// REQ9.3: Strategy Pattern Interface
-class INotificationStrategy {
+// Strategy Interface
+class NotificationStrategy {
 public:
-    virtual ~INotificationStrategy() {}
-    virtual void sendNotification(string message) = 0;
+    virtual ~NotificationStrategy() {}
+    virtual void notify(const string& message) = 0;
 };
 
 // Concrete Strategy 1: SMS
-class SMSStrategy : public INotificationStrategy {
+class SMSStrategy : public NotificationStrategy {
 public:
-    void sendNotification(string message) {
-        // REQ9.4: Simülasyon mesajý
-        cout << "[SMS GONDERILDI]: " << message << endl;
+    void notify(const string& message) {
+        cout << "[SMS SENT] " << message << endl;
     }
 };
 
 // Concrete Strategy 2: Alarm
-class AlarmStrategy : public INotificationStrategy {
+class AlarmStrategy : public NotificationStrategy {
 public:
-    void sendNotification(string message) {
-        cout << "[ALARM CALIYOR]: DIKKAT! " << message << endl;
-    }
-};
-
-// Concrete Strategy 3: Log
-class LogStrategy : public INotificationStrategy {
-public:
-    void sendNotification(string message) {
-        cout << "[LOG KAYDI]: " << message << endl;
+    void notify(const string& message) {
+        cout << "[ALARM SOUNDING] BEEP! BEEP! " << message << endl;
     }
 };
 

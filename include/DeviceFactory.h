@@ -1,18 +1,25 @@
 #ifndef DEVICE_FACTORY_H
 #define DEVICE_FACTORY_H
 
-#include "ConcreteDevices.h"
+#include "Device.h"
+#include "Light.h"
+#include "Tv.h"
+#include "Camera.h"
+// include "ConcreteDevices.h" <-- BUNU SILDIK, yerine asil dosyalari ekledik
 
-// REQ8.3: Factory Pattern
 class DeviceFactory {
 public:
-    static Device* createDevice(int type) {
-        switch (type) {
-        case 1: return new Light("Salon Isigi");
-        case 2: return new Camera("Guvenlik Kamerasi");
-        case 3: return new ExternalLightAdapter("Dis Cephe Isigi (Adapter)");
-        default: return NULL;
+    static Device* createDevice(const string& type, const string& name, int id) {
+        if (type == "Light") {
+            return new Light(name, id);
         }
+        else if (type == "Tv") {
+            return new Tv(name, id);
+        }
+        else if (type == "Camera") {
+            return new Camera(name, id);
+        }
+        return NULL;
     }
 };
 
