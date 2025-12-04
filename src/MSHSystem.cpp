@@ -26,10 +26,9 @@ void MSHSystem::duplicateDevice(int index, int newId) {
     if (index >= 0 && index < (int)devices.size()) {
         cout << "\n[REQ10] Cloning device..." << endl;
         
-        // Prototype Pattern
+        
         Device* cloneDevice = devices[index]->clone(); 
         
-        // Yeni Device.h yapisina uygun setter
         cloneDevice->setId(newId);
         
         devices.push_back(cloneDevice);
