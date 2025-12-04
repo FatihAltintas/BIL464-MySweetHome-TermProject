@@ -7,7 +7,7 @@
 
 class ShowAboutCommand : public IMenuCommand {
 public:
-    void execute() override {
+    void execute() {
         std::cout << "\n--- GELISTIRICILER ---" << std::endl;
         std::cout << "EMIR RIDVAN AKTAS" << std::endl;
         std::cout << "AYBERK DOGAN" << std::endl;
@@ -22,7 +22,7 @@ public:
         std::cin.get();
     }
 
-    std::string getDescription() const override {
+    std::string getDescription() const  {
         return "Hakkinda (About)";
     }
 };

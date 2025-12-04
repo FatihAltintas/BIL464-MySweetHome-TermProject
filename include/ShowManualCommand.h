@@ -7,7 +7,7 @@
 
 class ShowManualCommand : public IMenuCommand {
 public:
-    void execute() override {
+    void execute()  {
         #ifdef _WIN32
             system("cls");
         #else
@@ -18,7 +18,7 @@ public:
         waitForKeyInput();
     }
 
-    std::string getDescription() const override {
+    std::string getDescription() const  {
         return "Kullanim Kilavuzu (Help)";
     }
 

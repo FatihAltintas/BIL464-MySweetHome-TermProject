@@ -6,7 +6,7 @@
 
 class ChangeModeCommand : public IMenuCommand {
 public:
-    void execute() override {
+    void execute()  {
         std::cout << "\n--- MOD SECIMI ---" << std::endl;
         std::cout << "[N] Normal" << std::endl;
         std::cout << "[E] Emergency" << std::endl;
@@ -19,7 +19,7 @@ public:
         std::cout << "[LOG] Mod degistirildi: " << mode << std::endl;
     }
 
-    std::string getDescription() const override {
+    std::string getDescription() const  {
         return "Mod Degistir";
     }
 };

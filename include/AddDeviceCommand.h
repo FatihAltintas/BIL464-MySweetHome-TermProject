@@ -7,7 +7,7 @@
 
 class AddDeviceCommand : public IMenuCommand {
 public:
-    void execute() override {
+    void execute()  {
         showDeviceSubMenu();
         int choice;
         std::cin >> choice;
@@ -15,7 +15,7 @@ public:
         std::cout << "[LOG] " << choice << " nolu cihaz secimi alindi. (Henuz implemente edilmedi)" << std::endl;
     }
 
-    std::string getDescription() const override {
+    std::string getDescription() const  {
         return "Cihaz Ekle / Yonet";
     }
 

@@ -1,9 +1,10 @@
 #ifndef MENUHANDLER_H
 #define MENUHANDLER_H
 
+#include "IMenuCommand.h"
 #include <map>
 #include <iostream>
-#include "IMenuCommand.h"
+#include <string>
 
 class MenuHandler {
 private:
@@ -11,38 +12,40 @@ private:
 
 public:
     ~MenuHandler() {
-        for (auto const& [key, val] : commands) {
-            delete val;
+        // C++98 Uyumlu map temizleme (Iterator kullanarak)
+        for (std::map<int, IMenuCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
+            delete it->second;
         }
         commands.clear();
     }
 
-    void registerCommand(int id, IMenuCommand* cmd) {
-        commands[id] = cmd;
+    void registerCommand(int key, IMenuCommand* command) {
+        commands[key] = command;
     }
 
     void displayMenu() {
-        std::cout << "\n========================================" << std::endl;
-        std::cout << "          MY SWEET HOME (MSH)" << std::endl;
-        std::cout << "========================================" << std::endl;
+        std::cout << "\n========================================\n";
+        std::cout << "        MY SWEET HOME (MSH) MENU        \n";
+        std::cout << "========================================\n";
         
-        for (auto const& [key, val] : commands) {
-            std::cout << "[" << key << "] " << val->getDescription() << std::endl;
+        // C++98 Uyumlu Loop
+        // ESKI KOD: for (auto const& [key, val] : commands) { ... } <- BU C++17'DIR
+        for (std::map<int, IMenuCommand*>::const_iterator it = commands.begin(); it != commands.end(); ++it) {
+            std::cout << "[" << it->first << "] " << it->second->getDescription() << std::endl;
         }
-        
-        if (commands.find(10) == commands.end()) {
-             std::cout << "[10] Kapat (Shutdown)" << std::endl;
-        }
-
-        std::cout << "========================================" << std::endl;
+        std::cout << "----------------------------------------\n";
         std::cout << "Seciminiz: ";
     }
 
     void executeCommand(int choice) {
-        if (commands.find(choice) != commands.end()) {
-            commands[choice]->execute();
+        // C++98 Uyumlu Find
+        std::map<int, IMenuCommand*>::iterator it = commands.find(choice);
+        
+        if (it != commands.end()) {
+            it->second->execute();
         } else {
-            std::cout << "HATALI GIRIS! Gecerli bir secenek giriniz." << std::endl;
+            std::cout << "Gecersiz secim!\n";
+            // std::cin temizligi main loop'ta yapilmali ama burada da uyari veriyoruz
         }
     }
 };
