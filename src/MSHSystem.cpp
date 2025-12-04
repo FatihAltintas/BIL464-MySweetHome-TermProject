@@ -2,6 +2,8 @@
 #include "../include/Light.h"
 #include <iostream>
 
+using namespace std;
+
 MSHSystem::MSHSystem() {
     caretaker = new StateCaretaker();
     currentMode = "Normal";
@@ -17,28 +19,33 @@ MSHSystem::~MSHSystem() {
 
 void MSHSystem::addDevice(Device* d) {
     devices.push_back(d);
-    std::cout << "[SYSTEM] Device added: " << d->getName() << std::endl;
+    cout << "[SYSTEM] Device added: " << d->getName() << endl;
 }
 
+// REQ10: DUZELTME (setId kucuk harf oldu)
 void MSHSystem::duplicateDevice(int index, int newId) {
     if (index >= 0 && index < (int)devices.size()) {
-        std::cout << "\n[REQ10] Cloning device..." << std::endl;
+        cout << "\n[REQ10] Cloning device..." << endl;
         
         Device* cloneDevice = devices[index]->clone(); 
         
-        cloneDevice->setID(newId);
+        // GUNCELLEME: setID -> setId (Yeni Device.h uyumu)
+        cloneDevice->setId(newId);
         
         devices.push_back(cloneDevice);
-        std::cout << "[REQ10] Success! New device created from prototype." << std::endl;
+        cout << "[REQ10] Success! New device created from prototype." << endl;
     }
 }
 
-void MSHSystem::changeMode(const std::string& newMode) {
-    std::cout << "\n[REQ11] Changing mode from " << currentMode << " to " << newMode << "..." << std::endl;
+// REQ11: DUZELTME (bool yerine DeviceState Enum kullaniyoruz)
+void MSHSystem::changeMode(const string& newMode) {
+    cout << "\n[REQ11] Changing mode from " << currentMode << " to " << newMode << "..." << endl;
     
-    std::vector<bool> currentStates;
+    
+    vector<DeviceState> currentStates;
     for (size_t i = 0; i < devices.size(); ++i) {
-        currentStates.push_back(devices[i]->getStatus());
+       
+        currentStates.push_back(devices[i]->getState());
     }
     
     HomeMemento* memento = new HomeMemento(currentMode, currentStates);
@@ -52,21 +59,22 @@ void MSHSystem::changeMode(const std::string& newMode) {
 }
 
 void MSHSystem::restorePreviousMode() {
-    std::cout << "\n[REQ12] Attempting to restore previous state..." << std::endl;
+    cout << "\n[REQ12] Attempting to restore previous state..." << endl;
     
     HomeMemento* memento = caretaker->undo();
     if (memento != NULL) {
         currentMode = memento->getStateName();
-        std::vector<bool> states = memento->getDeviceStates();
+        vector<DeviceState> states = memento->getDeviceStates();
 
-        std::cout << "[REQ12] Mode restored to: " << currentMode << std::endl;
+        cout << "[REQ12] Mode restored to: " << currentMode << endl;
 
         for (size_t i = 0; i < devices.size() && i < states.size(); ++i) {
-            if (states[i]) {
+            if (states[i] == ACTIVE) {
                 devices[i]->powerOn();
-            } else {
+            } else if (states[i] == INACTIVE) {
                 devices[i]->powerOff();
             }
+            
         }
         
         delete memento;
@@ -74,10 +82,12 @@ void MSHSystem::restorePreviousMode() {
 }
 
 void MSHSystem::listDevices() {
-    std::cout << "--- Device List ---" << std::endl;
+    cout << "--- Device List ---" << endl;
     for (size_t i = 0; i < devices.size(); ++i) {
-        std::cout << "ID: " << i << " | Name: " << devices[i]->getName() 
-                  << " | Status: " << (devices[i]->getStatus() ? "ON" : "OFF") << std::endl;
+        string statusStr = (devices[i]->getState() == ACTIVE) ? "ON" : "OFF";
+        cout << "ID: " << devices[i]->getId() 
+             << " | Name: " << devices[i]->getName() 
+             << " | Status: " << statusStr << endl;
     }
-    std::cout << "-------------------" << std::endl;
+    cout << "-------------------" << endl;
 }

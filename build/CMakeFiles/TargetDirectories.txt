@@ -1,3 +1,0 @@
-C:/Users/Erhan/Desktop/MySweetHome_Erhan/build/CMakeFiles/MSH_Test.dir
-C:/Users/Erhan/Desktop/MySweetHome_Erhan/build/CMakeFiles/edit_cache.dir
-C:/Users/Erhan/Desktop/MySweetHome_Erhan/build/CMakeFiles/rebuild_cache.dir
