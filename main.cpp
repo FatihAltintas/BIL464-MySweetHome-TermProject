@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <windows.h> // Sleep fonksiyonu icin (Simulasyon)
+#include <windows.h> // Sleep icin
 
-// HEADERLAR
 #include "include/MSHSystem.h"         
 #include "include/MSHMenuController.h" 
 #include "include/Light.h"             
@@ -16,16 +15,7 @@
 
 using namespace std;
 
-// --- YARDIMCI FONKSIYONLAR ---
-void sleepSim(int seconds) {
-    cout << "   (Waiting " << seconds << "s...)" << endl;
-    // Sleep(seconds * 1000); // Windows icin (Istersen yorumu kaldir)
-}
-
-// ==========================================
-// TEST FONKSIYONLARI
-// ==========================================
-
+// --- ERHAN (REQ10-12) ---
 void runErhanTests(MSHSystem* system) {
     cout << "\n=== [AUTO-TEST] ERHAN'S MODULE (REQ10-12) ===\n";
     Light* l1 = new Light("Test Oturma Odasi", 101);
@@ -37,6 +27,7 @@ void runErhanTests(MSHSystem* system) {
     cout << "=== ERHAN DONE ===\n";
 }
 
+// --- EMRE (REQ4-5) ---
 void runEmreTests(MSHSystem* system) {
     cout << "\n=== [AUTO-TEST] EMRE'S MODULE (REQ4-5) ===\n";
     Logger::getInstance()->log("[MAIN] Logger & Sensors initialized.");
@@ -47,14 +38,16 @@ void runEmreTests(MSHSystem* system) {
     cout << "=== EMRE DONE ===\n";
 }
 
+// --- ELMAR (REQ6-7) ---
 void runElmarTests(MSHSystem* system) {
     cout << "\n=== [AUTO-TEST] ELMAR'S MODULE (REQ6-7) ===\n";
     Tv* salonTV = new Tv("Salon TV", 301);
     system->addDevice(salonTV);
-    // system->changeMode(MODE_CINEMA); // Testi kisalttim
+    // system->changeMode(MODE_CINEMA);
     cout << "=== ELMAR DONE ===\n";
 }
 
+// --- FATIH (REQ8-9) ---
 void runFatihTests(MSHSystem* system) {
     cout << "\n=== [AUTO-TEST] FATIH'S MODULE (REQ8-9) ===\n";
     Device* newCam = DeviceFactory::createDevice("Camera", "Guvenlik Kameras V1", 401);
@@ -62,67 +55,53 @@ void runFatihTests(MSHSystem* system) {
     cout << "=== FATIH DONE ===\n";
 }
 
-// --- EMIR'IN SENARYOLARI (REQ 13, 14, 15) ---
-// Dosyalari sildik cunku sistemimizle cakisti.
-// Mantigi burada isletiyoruz.
+// --- EMIR (REQ13-15) ---
 void runEmirTests(MSHSystem* system) {
-    cout << "\n=== [AUTO-TEST] EMIR'S MODULE (REQ13-15) STARTING ===\n";
-
-    // Gerekli Cihazlar
+    cout << "\n=== [AUTO-TEST] EMIR'S MODULE (REQ13-15) ===\n";
     Alarm* evAlarmi = new Alarm("Ana Alarm", 501);
     system->addDevice(evAlarmi);
-    
-    // REQ13: Camera detects motion -> Alarm -> Light -> Police
-    cout << "\n>> [REQ13] SECURITY SCENARIO: Motion Detected!\n";
-    cout << "   1. Camera detects motion...\n";
-    cout << "   2. Activating Alarm...\n";
-    evAlarmi->powerOn(); // Alarm Caliyor
-    sleepSim(1);
-    
-    cout << "   3. Turning ON all Lights...\n";
-    // Manuel olarak isiklari acalim (Normalde MSHSystem yapmali ama simulasyon bu)
-    // Elimizde pointer olmadigi icin log basiyoruz:
-    cout << "   [SYSTEM] All Lights turned ON automatically.\n";
-    sleepSim(1);
-    
-    cout << "   4. Calling Police...\n";
-    cout << "   [CALL] Dialing 155... Police is on the way!\n";
+    cout << ">> [REQ13] Motion Detected -> Alarm ON -> Lights ON -> Police Called\n";
+    evAlarmi->powerOn();
+    Sleep(500);
+    cout << "   [SYSTEM] Calling Police...\n";
+    cout << "=== EMIR DONE ===\n";
+}
 
-    // REQ14: Detector (Smoke/Gas) -> Alarm
-    cout << "\n>> [REQ14] DETECTION SCENARIO: Smoke Detected!\n";
-    cout << "   [SENSOR] Smoke Level Critical!\n";
-    evAlarmi->powerOn(); // Alarm Tetiklendi
-    cout << "   [SYSTEM] Alarm activated by Smoke Detector.\n";
-
-    // REQ15: User does not close alarm -> Lights Flash
-    cout << "\n>> [REQ15] TIMEOUT SCENARIO: Alarm Not Acknowledged\n";
-    cout << "   (User did not stop the alarm in 10 seconds...)\n";
-    for(int i=0; i<3; i++) {
-        cout << "   [LIGHTS] FLASH ON...\n";
-        sleepSim(0);
-        cout << "   [LIGHTS] FLASH OFF...\n";
-    }
+// --- TAHA (REQ3-16) ---
+void runTahaTests(MSHSystem* system) {
+    cout << "\n=== [AUTO-TEST] TAHA'S MODULE (REQ3-16) ===\n";
     
-    // REQ16: Fire Station (Taha'nin konusu ama Emir ile baglantili)
-    cout << "   [SYSTEM] No response! Calling Fire Station...\n";
+    // REQ3: Keyboard Interaction (Zaten MenuHandler ile yapildi)
+    cout << ">> [REQ3] Keyboard Interaction is handled by MSHMenuController.\n";
 
-    cout << "=== [AUTO-TEST] EMIR DONE ===\n";
+    // REQ16: Fire Station Logic
+    cout << ">> [REQ16] Testing Fire Station Protocol...\n";
+    
+    // Senaryo: Yangin var, kullanici cevap vermiyor
+    cout << "   [SENSOR] Smoke detected! Waiting for user...\n";
+    Sleep(1000); 
+    cout << "   [TIMEOUT] User did not acknowledge!\n";
+    
+    // Taha'nin mantigini cagiriyoruz
+    system->callFireStation();
+    
+    cout << "=== TAHA DONE ===\n";
 }
 
 int main() {
     cout << "==========================================" << endl;
-    cout << "   MY SWEET HOME - FINAL INTEGRATION v5   " << endl;
+    cout << "   MY SWEET HOME - FINAL INTEGRATION v6   " << endl;
     cout << "==========================================" << endl;
 
     Logger::getInstance()->log("System Booting up...");
     MSHSystem* coreSystem = new MSHSystem();
 
-    // TUM EKIBIN TESTLERI
     runErhanTests(coreSystem);
     runEmreTests(coreSystem);
     runElmarTests(coreSystem);
     runFatihTests(coreSystem);
-    runEmirTests(coreSystem); // Emir Eklendi
+    runEmirTests(coreSystem);
+    runTahaTests(coreSystem); // Taha eklendi
 
     cout << "\n>>> MAIN MENU STARTING... <<<\n";
     MSHMenuController* menuApp = new MSHMenuController();

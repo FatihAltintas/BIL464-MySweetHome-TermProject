@@ -117,4 +117,17 @@ void MSHSystem::listDevices() {
              << " | Status: " << statusStr << endl;
     }
     cout << "-------------------" << endl;
+    
+}
+    void MSHSystem:: callFireStation () {
+    cout << "\n!!! CRITICAL ALARM (REQ16) !!!" << endl;
+    cout << ">> Smoke detected and user did not respond!" << endl;
+    cout << ">> CALLING FIRE STATION... (110)" << endl;
+    cout << ">> ALL NON-ESSENTIAL DEVICES SHUTTING DOWN..." << endl;
+    
+    // Taha'nin mantigi: Her seyi kapat
+    for (size_t i = 0; i < devices.size(); ++i) {
+        devices[i]->powerOff();
+    }
+
 }
