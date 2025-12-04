@@ -16,21 +16,21 @@ class Device;
 class IObserver {
 public:
     virtual ~IObserver() {}
-    // Cihazda bir değişiklik olduğunda bu fonksiyon tetiklenecek
+    // Cihazda bir deðiþiklik olduðunda bu fonksiyon tetiklenecek
     virtual void update(Device* device) = 0;
 };
 
-// Cihaz Durumları (REQ9 LLR-9.1)
+// Cihaz Durumlarý (REQ9 LLR-9.1)
 enum DeviceState { ACTIVE, INACTIVE, FAILED };
 
 // =============================================================
-// DEVICE BASE CLASS (Tüm Grubun Kullanacağı Ana Sınıf)
+// DEVICE BASE CLASS (Tüm Grubun Kullanacaðý Ana Sýnýf)
 // =============================================================
 class Device {
 protected:
     string name;
     int id;
-    DeviceState state; // isActive yerine state kullanıyoruz
+    DeviceState state; // isActive yerine state kullanýyoruz (Daha kapsamlý)
 
     // REQ9: Bizi dinleyen yöneticilerin listesi
     vector<IObserver*> observers;
@@ -40,25 +40,37 @@ public:
     Device(const string& n) : name(n), id(0), state(INACTIVE) {}
     virtual ~Device() {}
 
-    // SAF SANAL FONKSİYONLAR
+    // ---------------------------------------------------------
+    // SAF SANAL FONKSÝYONLAR (Alt sýnýflar doldurmak zorunda)
+    // ---------------------------------------------------------
+
+    // REQ8.5: Prototype Pattern (Her cihaz kendini kopyalayabilmeli)
     virtual Device* clone() const = 0;
+
+    // Cihaza özgü iþlem (Operate)
     virtual void operate() = 0;
 
-    // REQ10: Configuration Transfer
+    // ---------------------------------------------------------
+    // ORTAK FONKSÝYONLAR
+    // ---------------------------------------------------------
+
+    // REQ10: Configuration Transfer (Ayarlarý kopyalamak için)
     virtual void copyConfigFrom(const Device* other) {
         if (other) {
             this->name = other->name;
+            // ID kopyalanmaz, unique kalýr.
             cout << "[LOG] Config copied from " << other->name << endl;
         }
     }
 
-    // Güç Yönetimi
+    // Güç Yönetimi (State'i günceller ve notify eder)
     virtual void powerOn() {
         if (state != FAILED) {
             state = ACTIVE;
             cout << name << " is ON." << endl;
             notifyObservers();
-        } else {
+        }
+        else {
             cout << name << " is FAILED. Cannot power on." << endl;
         }
     }
@@ -71,9 +83,10 @@ public:
         }
     }
 
+    // REQ9.1: Arýza veya durum deðiþikliðini manuel set etmek için
     void setState(DeviceState newState) {
         state = newState;
-        notifyObservers();
+        notifyObservers(); // Durum deðiþti, haber ver!
     }
 
     // Getter & Setter
@@ -82,7 +95,10 @@ public:
     int getId() const { return id; }
     void setId(int newId) { id = newId; }
 
-    // OBSERVER MEKANİZMASI
+    // ---------------------------------------------------------
+    // OBSERVER MEKANÝZMASI (REQ9)
+    // ---------------------------------------------------------
+
     void attach(IObserver* observer) {
         observers.push_back(observer);
     }
@@ -104,4 +120,3 @@ public:
 };
 
 #endif
-
