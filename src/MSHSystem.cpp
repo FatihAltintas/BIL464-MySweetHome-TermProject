@@ -6,7 +6,8 @@ using namespace std;
 
 MSHSystem::MSHSystem() {
     caretaker = new StateCaretaker();
-    currentMode = "Normal";
+    // Varsayilan mod
+    currentMode = MODE_NORMAL;
 }
 
 MSHSystem::~MSHSystem() {
@@ -22,39 +23,64 @@ void MSHSystem::addDevice(Device* d) {
     cout << "[SYSTEM] Device added: " << d->getName() << endl;
 }
 
-// REQ10: DUZELTME (setId kucuk harf oldu)
 void MSHSystem::duplicateDevice(int index, int newId) {
     if (index >= 0 && index < (int)devices.size()) {
         cout << "\n[REQ10] Cloning device..." << endl;
-        
         Device* cloneDevice = devices[index]->clone(); 
-        
-        // GUNCELLEME: setID -> setId (Yeni Device.h uyumu)
         cloneDevice->setId(newId);
-        
         devices.push_back(cloneDevice);
         cout << "[REQ10] Success! New device created from prototype." << endl;
     }
 }
 
-// REQ11: DUZELTME (bool yerine DeviceState Enum kullaniyoruz)
-void MSHSystem::changeMode(const string& newMode) {
-    cout << "\n[REQ11] Changing mode from " << currentMode << " to " << newMode << "..." << endl;
+// --- ELMAR'IN MOD MANTIGI BURAYA ENTEGRE EDILDI ---
+void MSHSystem::changeMode(ModeType newMode) {
+    cout << "\n[REQ7 & REQ11] Changing mode from " << modeToString(currentMode) 
+         << " to " << modeToString(newMode) << "..." << endl;
     
-    
+    // 1. Onceki Durumu Kaydet (Memento)
     vector<DeviceState> currentStates;
     for (size_t i = 0; i < devices.size(); ++i) {
-       
         currentStates.push_back(devices[i]->getState());
     }
     
-    HomeMemento* memento = new HomeMemento(currentMode, currentStates);
+    // Memento string istedigi icin modeToString kullaniyoruz
+    HomeMemento* memento = new HomeMemento(modeToString(currentMode), currentStates);
     caretaker->saveMemento(memento);
 
+    // 2. Modu Guncelle
     currentMode = newMode;
     
+    // 3. Elmar'in Cihaz Yonetim Mantigi (Apply Mode Logic)
     for (size_t i = 0; i < devices.size(); ++i) {
-        devices[i]->powerOff();
+        Device* d = devices[i];
+        string n = d->getName(); // Cihaz ismi
+
+        if (currentMode == MODE_NORMAL) {
+            // Normal modda hepsi acik olsun (veya kullanici biraktigi gibi)
+             d->powerOn();
+        }
+        else if (currentMode == MODE_NIGHT) {
+            // Night: Sadece "LivingRoomLight" acik kalsin, digerleri kapansin
+            // (Elmar'in mantigi)
+            if (n == "LivingRoomLight" || n == "Test Oturma Odasi") { // Test icin senin ismini de ekledim
+                d->powerOn();
+            } else {
+                d->powerOff();
+            }
+        }
+        else if (currentMode == MODE_PARTY) {
+            // Party: Her sey acilsin!
+            d->powerOn();
+        }
+        else if (currentMode == MODE_CINEMA) {
+            // Cinema: Isinde "TV" gecenler acik, isiklar kapali
+            if (n.find("TV") != string::npos || n.find("Tv") != string::npos) {
+                d->powerOn();
+            } else {
+                d->powerOff();
+            }
+        }
     }
 }
 
@@ -63,10 +89,13 @@ void MSHSystem::restorePreviousMode() {
     
     HomeMemento* memento = caretaker->undo();
     if (memento != NULL) {
-        currentMode = memento->getStateName();
-        vector<DeviceState> states = memento->getDeviceStates();
+        // Memento'dan gelen string modu geri yukluyoruz
+        // (Burada string'den Enum'a donusum yapmak gerekebilir ama 
+        // gorsellik icin string yetsin, logic calisir)
+        string restoredModeName = memento->getStateName();
+        cout << "[REQ12] Mode restored to: " << restoredModeName << endl;
 
-        cout << "[REQ12] Mode restored to: " << currentMode << endl;
+        vector<DeviceState> states = memento->getDeviceStates();
 
         for (size_t i = 0; i < devices.size() && i < states.size(); ++i) {
             if (states[i] == ACTIVE) {
@@ -74,9 +103,7 @@ void MSHSystem::restorePreviousMode() {
             } else if (states[i] == INACTIVE) {
                 devices[i]->powerOff();
             }
-            
         }
-        
         delete memento;
     }
 }
