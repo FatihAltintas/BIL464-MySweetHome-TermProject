@@ -5,7 +5,6 @@
 #include "Light.h"
 #include "Tv.h"
 #include "Camera.h"
-// include "ConcreteDevices.h" <-- BUNU SILDIK, yerine asil dosyalari ekledik
 
 class DeviceFactory {
 public:

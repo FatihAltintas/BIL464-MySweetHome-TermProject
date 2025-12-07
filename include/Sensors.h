@@ -7,11 +7,10 @@
 
 using namespace std;
 
-// --- DUMAN SENSORU ---
 class SmokeDetector : public Device {
 public:
     SmokeDetector(int i) : Device("Smoke Detector") {
-        setId(i); // Yeni Device.h uyumu
+        setId(i); 
     }
 
     Device* clone() const {
@@ -22,13 +21,11 @@ public:
         cout << "[SENSOR] Smoke Detector is scanning for smoke..." << endl;
     }
 
-    // Emre'nin ekstra fonksiyonu varsa buraya eklenir
     void triggerAlarm() {
         cout << "!!! SMOKE DETECTED !!! ALARM TRIGGERED !!!" << endl;
     }
 };
 
-// --- GAZ SENSORU ---
 class GasDetector : public Device {
 public:
     GasDetector(int i) : Device("Gas Detector") {
@@ -44,8 +41,6 @@ public:
     }
 };
 
-// --- FACTORY PATTERN (Emre'nin Fabrikası) ---
-// Abstract Factory
 class DetectorFactory {
 public:
     virtual ~DetectorFactory() {}
@@ -53,7 +48,6 @@ public:
     virtual Device* createGasDetector(int id) = 0;
 };
 
-// Concrete Factory
 class SecurityDeviceFactory : public DetectorFactory {
 public:
     Device* createSmokeDetector(int id) {

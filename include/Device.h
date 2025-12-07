@@ -9,7 +9,6 @@ using namespace std;
 
 class Device;
 
-
 class IObserver {
 public:
     virtual ~IObserver() {}
@@ -26,14 +25,16 @@ protected:
     string name;
     int id;
     DeviceState state; 
-
-    
     vector<IObserver*> observers;
 
 public:
-    // Constructor
+    
     Device(const string& n) : name(n), id(0), state(INACTIVE) {}
-    virtual ~Device() {}
+    virtual ~Device() {
+       
+        observers.clear();
+        
+    }
 
    
     virtual Device* clone() const = 0;

@@ -19,13 +19,12 @@ public:
     ~MSHSystem();
 
     void addDevice(Device* d);
-    void removeDevice(int id); // Fatih icin eklemistik
+    void removeDevice(int id); 
     void duplicateDevice(int index, int newId);
     void changeMode(ModeType newMode);
     void restorePreviousMode();
     void listDevices();
 
-    // Taha (REQ16) icin ekledigimiz satir:
     void callFireStation();
 };
 

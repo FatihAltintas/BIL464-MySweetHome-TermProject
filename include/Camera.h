@@ -9,7 +9,6 @@ using namespace std;
 
 class Camera : public Device {
 public:
-    // DUZELTME: Constructor artik ID de aliyor
     Camera(const string& n, int i) : Device(n) {
         setId(i);
     }

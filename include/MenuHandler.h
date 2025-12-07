@@ -28,8 +28,6 @@ public:
         std::cout << "        MY SWEET HOME (MSH) MENU        \n";
         std::cout << "========================================\n";
         
-        // C++98 Uyumlu Loop
-        // ESKI KOD: for (auto const& [key, val] : commands) { ... } <- BU C++17'DIR
         for (std::map<int, IMenuCommand*>::const_iterator it = commands.begin(); it != commands.end(); ++it) {
             std::cout << "[" << it->first << "] " << it->second->getDescription() << std::endl;
         }
@@ -38,14 +36,12 @@ public:
     }
 
     void executeCommand(int choice) {
-        // C++98 Uyumlu Find
         std::map<int, IMenuCommand*>::iterator it = commands.find(choice);
         
         if (it != commands.end()) {
             it->second->execute();
         } else {
             std::cout << "Gecersiz secim!\n";
-            // std::cin temizligi main loop'ta yapilmali ama burada da uyari veriyoruz
         }
     }
 };

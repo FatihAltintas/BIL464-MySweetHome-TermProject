@@ -1,17 +1,28 @@
-cmake_minimum_required(VERSION 3.10)
+# Hocanin tahtadaki versiyonu
+cmake_minimum_required(VERSION 3.15)
 
-# Proje Adi
-project(MySweetHome_Final)
+# Proje adi (Ayni zamanda cikti dosyasinin adi olacak)
+project(MSH_System)
 
-# C++98 Standarti
+# Hocanin kirmizi cizgisi: C++98
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Header dosyalari
-include_directories(include)
+# -----------------------------------------------------------
+# KAYNAK DOSYALARI AYARLAMA (Hocanin set(SRC ...) mantigi)
+# -----------------------------------------------------------
+# src klasorundeki tum .cpp dosyalari ve main.cpp'yi SRC degiskenine atiyoruz
+file(GLOB SRC "src/*.cpp" "main.cpp")
 
-# SIHIRLI SATIR: src icindeki BUTUN .cpp dosyalarini bul
-file(GLOB SOURCES "src/*.cpp" "main.cpp")
+# -----------------------------------------------------------
+# BUILD ISLEMI (Hocanin degiskenli yapisi)
+# -----------------------------------------------------------
+# ${PROJECT_NAME} -> MSH_System demektir
+# ${SRC} -> Yukarida buldugumuz dosya listesi
+add_executable(${PROJECT_NAME} ${SRC})
 
-# Hepsini tek bir MSH_System.exe haline getir
-add_executable(MSH_System ${SOURCES})
+# -----------------------------------------------------------
+# HEADER AYARLARI (Hocanin target_include mantigi)
+# -----------------------------------------------------------
+# include klasorunu projeye tanitiyoruz
+target_include_directories(${PROJECT_NAME} PUBLIC include)

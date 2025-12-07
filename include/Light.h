@@ -13,18 +13,17 @@ private:
     string color;
 
 public:
-    // DUZELTME: Constructor hem 'string' hem 'int' (ID) alacak sekilde ayarlandi.
-    // Device(n) cagiriliyor, ID ise setId(i) ile ataniyor.
     Light(const string& n, int i) : Device(n), brightness(100), color("White") {
         setId(i); 
     }
+    ~Light() {
+        
+    }
 
-    // Prototype Pattern (REQ10)
     Device* clone() const {
         return new Light(*this);
     }
 
-    // Observer Pattern (REQ9) uyumlulugu
     void operate() {
         cout << "[Light] Operating... (Lighting up the room)" << endl;
     }

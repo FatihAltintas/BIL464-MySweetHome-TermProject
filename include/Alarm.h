@@ -9,7 +9,6 @@ using namespace std;
 
 class Alarm : public Device {
 public:
-    // DUZELTME: Constructor ID aliyor
     Alarm(const string& n, int i) : Device(n) {
         setId(i);
     }
