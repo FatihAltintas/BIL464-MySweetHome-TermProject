@@ -17,6 +17,7 @@ private:
 public:
     MSHSystem();
     ~MSHSystem();
+    Device* getDevice(int id);
 
     void addDevice(Device* d);
     void removeDevice(int id); 

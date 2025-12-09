@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <windows.h> // Sleep icin
+#include <windows.h> 
 
 #include "include/MSHSystem.h"         
 #include "include/MSHMenuController.h" 
@@ -71,18 +71,14 @@ void runEmirTests(MSHSystem* system) {
 void runTahaTests(MSHSystem* system) {
     cout << "\n=== [AUTO-TEST] TAHA'S MODULE (REQ3-16) ===\n";
     
-    // REQ3: Keyboard Interaction (Zaten MenuHandler ile yapildi)
     cout << ">> [REQ3] Keyboard Interaction is handled by MSHMenuController.\n";
 
-    // REQ16: Fire Station Logic
     cout << ">> [REQ16] Testing Fire Station Protocol...\n";
     
-    // Senaryo: Yangin var, kullanici cevap vermiyor
     cout << "   [SENSOR] Smoke detected! Waiting for user...\n";
     Sleep(1000); 
     cout << "   [TIMEOUT] User did not acknowledge!\n";
     
-    // Taha'nin mantigini cagiriyoruz
     system->callFireStation();
     
     cout << "=== TAHA DONE ===\n";
@@ -90,24 +86,26 @@ void runTahaTests(MSHSystem* system) {
 
 int main() {
     cout << "==========================================" << endl;
-    cout << "   MY SWEET HOME - FINAL INTEGRATION v6   " << endl;
+    cout << "   MY SWEET HOME - FINAL INTEGRATION v7   " << endl;
     cout << "==========================================" << endl;
 
     Logger::getInstance()->log("System Booting up...");
     MSHSystem* coreSystem = new MSHSystem();
 
+    cout << "\n>>> SYSTEM SELF-CHECK STARTING... <<<\n";
     runErhanTests(coreSystem);
     runEmreTests(coreSystem);
     runElmarTests(coreSystem);
     runFatihTests(coreSystem);
     runEmirTests(coreSystem);
-    runTahaTests(coreSystem); // Taha eklendi
+    runTahaTests(coreSystem);
+    cout << ">>> SYSTEM SELF-CHECK COMPLETED. <<<\n";
 
-    cout << "\n>>> MAIN MENU STARTING... <<<\n";
-    MSHMenuController* menuApp = new MSHMenuController();
+    cout << "\n>>> STARTING USER INTERFACE... <<<\n";
     
-    cout << "\n[INFO] Sistem calisiyor." << endl;
-
+    MSHMenuController* menuApp = new MSHMenuController(coreSystem);
+    
+    menuApp->run(); 
     delete menuApp;
     delete coreSystem;
 

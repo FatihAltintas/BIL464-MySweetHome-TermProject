@@ -131,3 +131,23 @@ void MSHSystem::listDevices() {
     }
 
 }
+
+Device* MSHSystem::getDevice(int id) {
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i]->getId() == id) {
+            return devices[i];
+        }
+    }
+    return NULL;
+}
+void MSHSystem::removeDevice(int id) {
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i]->getId() == id) {
+            cout << "[SYSTEM] Removing device: " << devices[i]->getName() << endl;
+            delete devices[i]; 
+            devices.erase(devices.begin() + i); 
+            return;
+        }
+    }
+    cout << "[SYSTEM] Device ID " << id << " not found!" << endl;
+}

@@ -1,62 +1,60 @@
-#ifndef MSHMENUCONTROLLER_H  
-#define MSHMENUCONTROLLER_H  
+#ifndef MSHMENUCONTROLLER_H
+#define MSHMENUCONTROLLER_H
 
 #include "MenuHandler.h"
-#include "ShowManualCommand.h"
+#include "MSHSystem.h"
+#include "RemoveDeviceCommand.h"
+#include "ShowStatusCommand.h"
 #include "AddDeviceCommand.h"
-#include "ChangeModeCommand.h"
-#include "ShowAboutCommand.h"
+#include "PowerOnCommand.h"
+#include "PowerOffCommand.h"
 #include "CommandStubs.h"
+#include "ShowManualCommand.h"
+#include "ShowAboutCommand.h"
+#include "ChangeModeCommand.h"
+
+#include <iostream>
+#include <limits>
+
+using namespace std;
 
 class MSHMenuController {
 private:
     bool isRunning;
     MenuHandler menuHandler;
-
+    MSHSystem* system; 
 public:
-     MSHMenuController() : isRunning(true) {
-        menuHandler.registerCommand(1, new ShowStatusCommand());
-
-        menuHandler.registerCommand(2, new AddDeviceCommand()); 
-
-        menuHandler.registerCommand(3, new RemoveDeviceCommand());
-
-        menuHandler.registerCommand(4, new PowerOnCommand());
-
-        menuHandler.registerCommand(5, new PowerOffCommand());
-
-        menuHandler.registerCommand(6, new ChangeModeCommand());
-
-        menuHandler.registerCommand(7, new ChangeStateCommand());
-
+    
+    MSHMenuController(MSHSystem* sys) : isRunning(true), system(sys) {
+        
+        
+        menuHandler.registerCommand(1, new ShowStatusCommand(system)); 
+        menuHandler.registerCommand(2, new AddDeviceCommand(system));
+        menuHandler.registerCommand(3, new RemoveDeviceCommand(system));
+        menuHandler.registerCommand(4, new PowerOnCommand(system)); 
+        menuHandler.registerCommand(5, new PowerOffCommand(system));
+        
+       
+        menuHandler.registerCommand(6, new ChangeModeCommand()); 
+        menuHandler.registerCommand(7, new StubCommand("State Degistir"));
         menuHandler.registerCommand(8, new ShowManualCommand());
-
         menuHandler.registerCommand(9, new ShowAboutCommand());
+        menuHandler.registerCommand(10, new StubCommand("Cikis")); 
     }
 
     void run() {
-        int choice;
-        while (isRunning) {
+        int choice = 0;
+        while (choice != 10) {
             menuHandler.displayMenu();
-
-            if (!(std::cin >> choice)) {
-                std::cout << "HATALI GIRIS! Sayi girmelisiniz." << std::endl;
-                std::cin.clear();
-                std::cin.ignore(10000, '\n'); 
+            if (!(cin >> choice)) {
+                cout << "Hata: Sayi giriniz.\n";
+                cin.clear();
+                cin.ignore(10000, '\n');
                 continue;
             }
-
-            if (choice == 10) {
-                shutdown();
-            } else {
-                menuHandler.executeCommand(choice);
-            }
+            if (choice == 10) break;
+            menuHandler.executeCommand(choice);
         }
-    }
-
-    void shutdown() {
-        std::cout << "Sistem kapatiliyor... Gule gule!" << std::endl;
-        isRunning = false;
     }
 };
 

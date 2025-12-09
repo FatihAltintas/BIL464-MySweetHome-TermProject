@@ -3,46 +3,30 @@
 
 #include "IMenuCommand.h"
 #include <iostream>
+#include <string>
+#include <limits>
 
-class ShowStatusCommand : public IMenuCommand {
+using namespace std;
+
+class StubCommand : public IMenuCommand {
+private:
+    string description;
+
 public:
-    void execute()  {
-        std::cout << "[LOG] Ev durumu gosteriliyor... (Henuz implemente edilmedi)" << std::endl;
-    }
-    std::string getDescription() const  { return "Ev Durumunu Goster (Status)"; }
-};
+    StubCommand(const string& desc) : description(desc) {}
 
-class RemoveDeviceCommand : public IMenuCommand {
-public:
-    void execute()  {
-        std::cout << "[LOG] Cihaz silme menusu... (Henuz implemente edilmedi)" << std::endl;
-    }
-    std::string getDescription() const  { return "Cihaz Sil (Remove Device)"; }
-};
-
-
-class PowerOnCommand : public IMenuCommand {
-public:
-    void execute()  {
-        std::cout << "[LOG] Cihaz acma islemi... (Henuz implemente edilmedi)" << std::endl;
-    }
-    std::string getDescription() const  { return "Cihazi Ac (Power On)"; }
-};
-
-class PowerOffCommand : public IMenuCommand {
-public:
     void execute() {
-        std::cout << "[LOG] Cihaz kapatma islemi... (Henuz implemente edilmedi)" << std::endl;
+        cout << "\n[INFO] Bu ozellik henuz aktif degil: " << description << endl;
+        cout << "Devam etmek icin [Enter] tusuna basin..." << endl;
+        
+        // Bekleme yapalim
+        cin.ignore(10000, '\n');
+        cin.get();
     }
-    std::string getDescription() const  { return "Cihazi Kapat (Power Off)"; }
-};
 
-class ChangeStateCommand : public IMenuCommand {
-public:
-    void execute()  {
-        std::cout << "[LOG] Durum degistirme islemi... (Henuz implemente edilmedi)" << std::endl;
+    string getDescription() const {
+        return description;
     }
-    std::string getDescription() const { return "Durum Degistir (Change State)"; }
 };
 
 #endif
