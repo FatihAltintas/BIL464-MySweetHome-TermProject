@@ -1,6 +1,14 @@
 #include <iostream>
 #include <vector>
-#include <windows.h> 
+#ifdef _WIN32
+    
+    #include <windows.h>
+    #define MY_SLEEP(s) Sleep(s * 1000)
+#else
+
+    #include <unistd.h>
+    #define MY_SLEEP(s) sleep(s)
+#endif
 
 #include "include/MSHSystem.h"         
 #include "include/MSHMenuController.h" 
@@ -110,4 +118,8 @@ int main() {
     delete coreSystem;
 
     return 0;
+}
+void sleepSim(int seconds) {
+    cout << "   (Waiting " << seconds << "s...)" << endl;
+    MY_SLEEP(seconds); 
 }
