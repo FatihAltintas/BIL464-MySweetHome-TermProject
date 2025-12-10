@@ -30,7 +30,7 @@ void runErhanTests(MSHSystem* system) {
     l1->powerOn();
     system->addDevice(l1);
     system->duplicateDevice(0, 102); 
-    system->changeMode(MODE_NIGHT); 
+    system->changeMode(MODE_EVENING);
     system->restorePreviousMode();
     cout << "=== ERHAN DONE ===\n";
 }

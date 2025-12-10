@@ -2,26 +2,47 @@
 #define CHANGEMODECOMMAND_H
 
 #include "IMenuCommand.h"
+#include "MSHSystem.h"
+#include "ModeManager.h"
 #include <iostream>
+#include <limits>
+#include <cctype>
+
+using namespace std;
 
 class ChangeModeCommand : public IMenuCommand {
+private:
+    MSHSystem* system;
+
 public:
-    void execute()  {
-        std::cout << "\n--- MOD SECIMI ---" << std::endl;
-        std::cout << "[N] Normal" << std::endl;
-        std::cout << "[E] Emergency" << std::endl;
-        std::cout << "[P] Panic" << std::endl;
-        std::cout << "[C] Child Lock" << std::endl;
-        std::cout << "Seciminiz: ";
-        
-        char mode;
-        std::cin >> mode;
-        std::cout << "[LOG] Mod degistirildi: " << mode << std::endl;
+    ChangeModeCommand(MSHSystem* sys) : system(sys) {}
+
+    void execute() {
+        char choice;
+        cout << "\n--- [6] CHANGE MODE ---\n";
+        cout << "(N)ormal\n";
+        cout << "(E)vening\n";
+        cout << "(P)arty\n";
+        cout << "(C)inema\n";
+        cout << "Select Mode: ";
+
+        if (cin >> choice) {
+            choice = toupper(choice);
+            switch (choice) {
+                case 'N': system->changeMode(MODE_NORMAL); break;
+                case 'E': system->changeMode(MODE_EVENING); break;
+                case 'P': system->changeMode(MODE_PARTY); break;
+                case 'C': system->changeMode(MODE_CINEMA); break;
+                default: cout << "[ERROR] Invalid Option!\n";
+            }
+        } else {
+            cin.clear(); cin.ignore(10000, '\n');
+        }
+        cout << "Press Enter to continue...";
+        cin.ignore(10000, '\n'); cin.get();
     }
 
-    std::string getDescription() const  {
-        return "Mod Degistir";
-    }
+    string getDescription() const { return "Change Mode - (N)ormal, (E)vening, (P)arty, (C)inema"; }
 };
 
 #endif

@@ -6,7 +6,6 @@ using namespace std;
 
 MSHSystem::MSHSystem() {
     caretaker = new StateCaretaker();
-    // Varsayilan mod
     currentMode = MODE_NORMAL;
 }
 
@@ -35,46 +34,37 @@ void MSHSystem::duplicateDevice(int index, int newId) {
 
 // --- ELMAR'IN MOD MANTIGI BURAYA ENTEGRE EDILDI ---
 void MSHSystem::changeMode(ModeType newMode) {
-    cout << "\n[REQ7 & REQ11] Changing mode from " << modeToString(currentMode) 
+    cout << "\n[REQ11] Changing mode from " << modeToString(currentMode) 
          << " to " << modeToString(newMode) << "..." << endl;
     
-    // 1. Onceki Durumu Kaydet (Memento)
     vector<DeviceState> currentStates;
     for (size_t i = 0; i < devices.size(); ++i) {
         currentStates.push_back(devices[i]->getState());
     }
-    
-    // Memento string istedigi icin modeToString kullaniyoruz
     HomeMemento* memento = new HomeMemento(modeToString(currentMode), currentStates);
     caretaker->saveMemento(memento);
 
-    // 2. Modu Guncelle
     currentMode = newMode;
     
-    // 3. Elmar'in Cihaz Yonetim Mantigi (Apply Mode Logic)
     for (size_t i = 0; i < devices.size(); ++i) {
         Device* d = devices[i];
-        string n = d->getName(); // Cihaz ismi
+        string n = d->getName(); 
 
         if (currentMode == MODE_NORMAL) {
-            // Normal modda hepsi acik olsun (veya kullanici biraktigi gibi)
              d->powerOn();
         }
-        else if (currentMode == MODE_NIGHT) {
-            // Night: Sadece "LivingRoomLight" acik kalsin, digerleri kapansin
-            // (Elmar'in mantigi)
-            if (n == "LivingRoomLight" || n == "Test Oturma Odasi") { // Test icin senin ismini de ekledim
-                d->powerOn();
+        else if (currentMode == MODE_EVENING) { 
+            if (n.find("Light") != string::npos || n.find("Isigi") != string::npos) { 
+                d->powerOn(); 
             } else {
                 d->powerOff();
             }
         }
         else if (currentMode == MODE_PARTY) {
-            // Party: Her sey acilsin!
             d->powerOn();
         }
         else if (currentMode == MODE_CINEMA) {
-            // Cinema: Isinde "TV" gecenler acik, isiklar kapali
+            
             if (n.find("TV") != string::npos || n.find("Tv") != string::npos) {
                 d->powerOn();
             } else {

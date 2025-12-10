@@ -12,6 +12,8 @@
 #include "ShowManualCommand.h"
 #include "ShowAboutCommand.h"
 #include "ChangeModeCommand.h"
+#include "ChangeStateCommand.h"
+
 
 #include <iostream>
 #include <limits>
@@ -35,8 +37,8 @@ public:
         menuHandler.registerCommand(5, new PowerOffCommand(system));
         
        
-        menuHandler.registerCommand(6, new ChangeModeCommand()); 
-        menuHandler.registerCommand(7, new StubCommand("State Degistir"));
+        menuHandler.registerCommand(6, new ChangeModeCommand(system));
+        menuHandler.registerCommand(7, new ChangeStateCommand(system));
         menuHandler.registerCommand(8, new ShowManualCommand());
         menuHandler.registerCommand(9, new ShowAboutCommand());
         menuHandler.registerCommand(10, new StubCommand("Cikis")); 
