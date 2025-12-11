@@ -4,6 +4,7 @@
 #include "IMenuCommand.h"
 #include <iostream>
 #include <limits>
+#include <cstdlib>
 
 class ShowManualCommand : public IMenuCommand {
 public:

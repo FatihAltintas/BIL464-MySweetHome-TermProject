@@ -70,7 +70,7 @@ void runEmirTests(MSHSystem* system) {
     system->addDevice(evAlarmi);
     cout << ">> [REQ13] Motion Detected -> Alarm ON -> Lights ON -> Police Called\n";
     evAlarmi->powerOn();
-    Sleep(500);
+    MY_SLEEP(1);
     cout << "   [SYSTEM] Calling Police...\n";
     cout << "=== EMIR DONE ===\n";
 }
@@ -84,7 +84,7 @@ void runTahaTests(MSHSystem* system) {
     cout << ">> [REQ16] Testing Fire Station Protocol...\n";
     
     cout << "   [SENSOR] Smoke detected! Waiting for user...\n";
-    Sleep(1000); 
+    MY_SLEEP(1);
     cout << "   [TIMEOUT] User did not acknowledge!\n";
     
     system->callFireStation();
