@@ -2,32 +2,23 @@
 #define LIGHT_H
 
 #include "Device.h"
+#include <iostream>
+#include <string>
 
+// Header dosyasinda sadece "Benim boyle fonksiyonlarim var" diyoruz.
 class Light : public Device {
 private:
     int brightness;
-    string color;
+    std::string color;
 
 public:
-    
-    Light(const string& n, int i) : Device(n), brightness(100), color("White") {
-        setId(i);
-    }
+    Light(const std::string& n, int i); // Constructor tanimi
+    virtual ~Light();                   // Destructor
 
-    
-    Device* clone() const {
-        return new Light(*this);
-    }
-
-    void operate() {
-        cout << "[Light] Operating... (Lighting up the room)" << endl;
-    }
-
-    void setBrightness(int b) { brightness = b; }
-    
-    void showInfo() const {
-        cout << "   -> Light Info: Color=" << color << ", Brightness=" << brightness << "%" << endl;
-    }
+    Device* clone() const;              // REQ10
+    void operate();
+    void setBrightness(int b);
+    void showInfo() const;
 };
 
 #endif
