@@ -5,101 +5,50 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
+// Forward Declaration
 class Device;
 
+// Observer Interface (Bu interface oldugu icin burada kalabilir veya ayrilabilir, 
+// ama genelde interface { } ici bos oldugu icin headerda kalmasi sorun degildir. 
+// Yine de kurala uyalım.)
 class IObserver {
 public:
     virtual ~IObserver() {}
-    
     virtual void update(Device* device) = 0;
 };
 
-
 enum DeviceState { ACTIVE, INACTIVE, FAILED };
-
 
 class Device {
 protected:
-    string name;
+    std::string name;
     int id;
-    DeviceState state; 
-    vector<IObserver*> observers;
+    DeviceState state;
+    std::vector<IObserver*> observers;
 
 public:
-    
-    Device(const string& n) : name(n), id(0), state(INACTIVE) {}
-    virtual ~Device() {
-       
-        observers.clear();
-        
-    }
+    Device(const std::string& n);
+    virtual ~Device();
 
-   
+    // Saf sanal fonksiyonlar (Bunlarin cpp'si olmaz)
     virtual Device* clone() const = 0;
-
-    
     virtual void operate() = 0;
 
+    // Normal fonksiyonlar (Bunlarin ici cpp'ye gidecek)
+    virtual void copyConfigFrom(const Device* other);
+    virtual void powerOn();
+    virtual void powerOff();
     
-    virtual void copyConfigFrom(const Device* other) {
-        if (other) {
-            this->name = other->name;
-           
-            cout << "[LOG] Config copied from " << other->name << endl;
-        }
-    }
-
-    virtual void powerOn() {
-        if (state != FAILED) {
-            state = ACTIVE;
-            cout << name << " is ON." << endl;
-            notifyObservers();
-        }
-        else {
-            cout << name << " is FAILED. Cannot power on." << endl;
-        }
-    }
-
-    virtual void powerOff() {
-        if (state != FAILED) {
-            state = INACTIVE;
-            cout << name << " is OFF." << endl;
-            notifyObservers();
-        }
-    }
-
+    void setState(DeviceState newState);
+    DeviceState getState() const;
     
-    void setState(DeviceState newState) {
-        state = newState;
-        notifyObservers(); 
-    }
+    std::string getName() const;
+    int getId() const;
+    void setId(int newId);
 
-    DeviceState getState() const { return state; }
-    string getName() const { return name; }
-    int getId() const { return id; }
-    void setId(int newId) { id = newId; }
-
-
-    void attach(IObserver* observer) {
-        observers.push_back(observer);
-    }
-
-    void detach(IObserver* observer) {
-        for (vector<IObserver*>::iterator it = observers.begin(); it != observers.end(); ++it) {
-            if (*it == observer) {
-                observers.erase(it);
-                break;
-            }
-        }
-    }
-
-    void notifyObservers() {
-        for (size_t i = 0; i < observers.size(); ++i) {
-            if (observers[i]) observers[i]->update(this);
-        }
-    }
+    void attach(IObserver* observer);
+    void detach(IObserver* observer);
+    void notifyObservers();
 };
 
 #endif

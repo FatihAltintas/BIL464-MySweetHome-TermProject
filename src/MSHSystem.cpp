@@ -4,11 +4,13 @@
 
 using namespace std;
 
+// Constructor
 MSHSystem::MSHSystem() {
     caretaker = new StateCaretaker();
     currentMode = MODE_NORMAL;
 }
 
+// Destructor
 MSHSystem::~MSHSystem() {
     delete caretaker;
     for (size_t i = 0; i < devices.size(); ++i) {
@@ -17,11 +19,35 @@ MSHSystem::~MSHSystem() {
     devices.clear();
 }
 
+// ID ile Cihaz Bulma (Menu ve Komutlar icin Helper)
+Device* MSHSystem::getDevice(int id) {
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i]->getId() == id) {
+            return devices[i];
+        }
+    }
+    return NULL;
+}
+
 void MSHSystem::addDevice(Device* d) {
     devices.push_back(d);
     cout << "[SYSTEM] Device added: " << d->getName() << endl;
 }
 
+// REQ8 (Fatih'in Isteri)
+void MSHSystem::removeDevice(int id) {
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i]->getId() == id) {
+            cout << "[SYSTEM] Removing device: " << devices[i]->getName() << endl;
+            delete devices[i]; 
+            devices.erase(devices.begin() + i); 
+            return;
+        }
+    }
+    cout << "[SYSTEM] Device ID " << id << " not found!" << endl;
+}
+
+// REQ10 (Erhan - Prototype)
 void MSHSystem::duplicateDevice(int index, int newId) {
     if (index >= 0 && index < (int)devices.size()) {
         cout << "\n[REQ10] Cloning device..." << endl;
@@ -32,11 +58,12 @@ void MSHSystem::duplicateDevice(int index, int newId) {
     }
 }
 
-// --- ELMAR'IN MOD MANTIGI BURAYA ENTEGRE EDILDI ---
+// REQ7 & REQ11 (Elmar & Erhan - Mod Degisimi ve Memento)
 void MSHSystem::changeMode(ModeType newMode) {
     cout << "\n[REQ11] Changing mode from " << modeToString(currentMode) 
          << " to " << modeToString(newMode) << "..." << endl;
     
+    // 1. Durumu Kaydet (Memento)
     vector<DeviceState> currentStates;
     for (size_t i = 0; i < devices.size(); ++i) {
         currentStates.push_back(devices[i]->getState());
@@ -44,8 +71,10 @@ void MSHSystem::changeMode(ModeType newMode) {
     HomeMemento* memento = new HomeMemento(modeToString(currentMode), currentStates);
     caretaker->saveMemento(memento);
 
+    // 2. Modu Guncelle
     currentMode = newMode;
     
+    // 3. Mod Mantigini Uygula (Elmar'in Logic)
     for (size_t i = 0; i < devices.size(); ++i) {
         Device* d = devices[i];
         string n = d->getName(); 
@@ -54,6 +83,7 @@ void MSHSystem::changeMode(ModeType newMode) {
              d->powerOn();
         }
         else if (currentMode == MODE_EVENING) { 
+            // Evening: Isiklar (Light) acik, digerleri kapali
             if (n.find("Light") != string::npos || n.find("Isigi") != string::npos) { 
                 d->powerOn(); 
             } else {
@@ -64,7 +94,7 @@ void MSHSystem::changeMode(ModeType newMode) {
             d->powerOn();
         }
         else if (currentMode == MODE_CINEMA) {
-            
+            // Cinema: TV acik, digerleri kapali
             if (n.find("TV") != string::npos || n.find("Tv") != string::npos) {
                 d->powerOn();
             } else {
@@ -74,14 +104,12 @@ void MSHSystem::changeMode(ModeType newMode) {
     }
 }
 
+// REQ12 (Erhan - Undo/Geri Alma)
 void MSHSystem::restorePreviousMode() {
     cout << "\n[REQ12] Attempting to restore previous state..." << endl;
     
     HomeMemento* memento = caretaker->undo();
     if (memento != NULL) {
-        // Memento'dan gelen string modu geri yukluyoruz
-        // (Burada string'den Enum'a donusum yapmak gerekebilir ama 
-        // gorsellik icin string yetsin, logic calisir)
         string restoredModeName = memento->getStateName();
         cout << "[REQ12] Mode restored to: " << restoredModeName << endl;
 
@@ -107,9 +135,10 @@ void MSHSystem::listDevices() {
              << " | Status: " << statusStr << endl;
     }
     cout << "-------------------" << endl;
-    
 }
-    void MSHSystem:: callFireStation () {
+
+// REQ16 (Taha - Acil Durum)
+void MSHSystem::callFireStation() {
     cout << "\n!!! CRITICAL ALARM (REQ16) !!!" << endl;
     cout << ">> Smoke detected and user did not respond!" << endl;
     cout << ">> CALLING FIRE STATION... (110)" << endl;
@@ -119,25 +148,4 @@ void MSHSystem::listDevices() {
     for (size_t i = 0; i < devices.size(); ++i) {
         devices[i]->powerOff();
     }
-
-}
-
-Device* MSHSystem::getDevice(int id) {
-    for (size_t i = 0; i < devices.size(); ++i) {
-        if (devices[i]->getId() == id) {
-            return devices[i];
-        }
-    }
-    return NULL;
-}
-void MSHSystem::removeDevice(int id) {
-    for (size_t i = 0; i < devices.size(); ++i) {
-        if (devices[i]->getId() == id) {
-            cout << "[SYSTEM] Removing device: " << devices[i]->getName() << endl;
-            delete devices[i]; 
-            devices.erase(devices.begin() + i); 
-            return;
-        }
-    }
-    cout << "[SYSTEM] Device ID " << id << " not found!" << endl;
 }
