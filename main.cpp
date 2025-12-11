@@ -1,31 +1,45 @@
+#include <iostream>
 #include "include/MSHSystem.h"
 #include "include/Light.h"
-#include <iostream>
+
+using namespace std;
 
 int main() {
-    std::cout << "=== MY SWEET HOME - REQ10, REQ11, REQ12 TEST ===" << std::endl;
+    cout << "==========================================" << endl;
+    cout << "      ERHAN BULBUL - INDIVIDUAL MODULE    " << endl;
+    cout << "      REQ10, REQ11, REQ12 TEST SYSTEM     " << endl;
+    cout << "==========================================" << endl;
 
+    // 1. Sistemi Ayaga Kaldir
     MSHSystem* system = new MSHSystem();
 
-    Light* l1 = new Light("Living Room Light", 101);
-    l1->powerOn(); 
+    // 2. Test Cihazi Ekle (Base Class Testi)
+    cout << "\n>>> [INIT] Creating Initial Device...\n";
+    Light* l1 = new Light("Oturma Odasi Isigi", 101);
+    l1->powerOn(); // Acik baslasin
     system->addDevice(l1);
 
-    std::cout << "\n*** TEST REQ10: Prototype Cloning ***" << std::endl;
+    // 3. REQ10 TESTI: Prototype Pattern (Klonlama)
+    // Beklenti: Ayni ayarlarda yeni bir cihaz olusmali
+    cout << "\n>>> [REQ10] TESTING PROTOTYPE PATTERN (CLONING)...\n";
     system->duplicateDevice(0, 102); 
-    
-    system->listDevices(); 
+    system->listDevices();
 
-    std::cout << "\n*** TEST REQ11: Saving State ***" << std::endl;
-    system->changeMode("Night Mode"); 
-    
-    system->listDevices(); 
+    // 4. REQ11 TESTI: Memento Pattern (Save State)
+    // Beklenti: Mod degisince eski durum hafizaya atilmali
+    cout << "\n>>> [REQ11] TESTING MEMENTO SAVE (CHANGE MODE)...\n";
+    system->changeMode("Child Lock"); // Ornek olarak cocuk kilidi (her seyi kapatir)
+    system->listDevices();
 
-    std::cout << "\n*** TEST REQ12: Restoring State ***" << std::endl;
-    system->restorePreviousMode(); 
+    // 5. REQ12 TESTI: Memento Pattern (Undo/Restore)
+    // Beklenti: Geri alinca isiklar tekrar acilmali
+    cout << "\n>>> [REQ12] TESTING MEMENTO RESTORE (UNDO)...\n";
+    system->restorePreviousMode();
+    system->listDevices();
 
-    system->listDevices(); 
-
+    // Temizlik
     delete system;
+
+    cout << "\n=== INDIVIDUAL TEST COMPLETED SUCCESSFULLY ===\n";
     return 0;
 }
