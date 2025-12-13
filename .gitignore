@@ -1,0 +1,19 @@
+# Derleme dosyalari
+build/
+bin/
+lib/
+*.exe
+*.o
+*.obj
+
+# Editor ayarlari
+.vscode/
+.idea/
+
+# Log dosyalari
+*.log
+log.txt
+
+# Sistem dosyalari
+.DS_Store
+Thumbs.db
