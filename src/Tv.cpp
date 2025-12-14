@@ -6,7 +6,7 @@ using namespace std;
 // Constructor
 Tv::Tv(const string& n, int i) : Device(n) {
     setId(i);
-    // TV'ye ozel varsayilan ayarlar (kanal, ses vb.) buraya eklenebilir
+    
 }
 
 // Destructor

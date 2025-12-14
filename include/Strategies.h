@@ -3,7 +3,7 @@
 
 #include <string>
 
-// Strategy Interface (Soyut Sinif)
+// Strategy Interface
 class NotificationStrategy {
 public:
     // Sanal destructor (Guvenli bellek yonetimi icin sart)

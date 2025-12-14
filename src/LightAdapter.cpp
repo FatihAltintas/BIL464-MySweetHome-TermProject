@@ -23,7 +23,7 @@ void LightAdapter::operate() {
     // Operasyonel mantik
 }
 
-// ADAPTERIN SIHRI BURADA:
+
 // Bizim sistem 'powerOn' cagiriyor, Adapter arkada 'turnOn220V' cagiriyor.
 void LightAdapter::powerOn() {
     if (getState() != ACTIVE) {

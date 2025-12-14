@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-// Header'da kod govdesi yok, sadece tanimlar var.
+
 class Tv : public Device {
 public:
     Tv(const std::string& n, int i); // Constructor

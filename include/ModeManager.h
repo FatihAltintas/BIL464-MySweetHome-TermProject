@@ -4,8 +4,7 @@
 #include <string>
 #include <iostream>
 
-// Header dosyasinda 'using namespace std' kullanmiyoruz.
-// Kod karmasasini onlemek icin std:: kullaniyoruz.
+
 
 enum ModeType {
     MODE_NORMAL,
@@ -21,7 +20,7 @@ enum SystemStateType {
     STATE_SLEEP
 };
 
-// Fonksiyonun sadece imzasi (govdesi cpp'ye gitti)
+
 std::string modeToString(ModeType m);
 
 #endif

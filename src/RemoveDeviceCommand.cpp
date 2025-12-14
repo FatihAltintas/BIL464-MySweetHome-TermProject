@@ -19,7 +19,7 @@ void RemoveDeviceCommand::execute() {
     if (cin >> id) {
         // MSHSystem uzerinden silme islemini cagir
         system->removeDevice(id);
-        // Not: Basarili/Basarisiz bilgisini MSHSystem ekrana/loga yaziyor zaten.
+        
     } else {
         cout << "[HATA] Gecersiz giris! Sayi girmelisiniz.\n";
         cin.clear();

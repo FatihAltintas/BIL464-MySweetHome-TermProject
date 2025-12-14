@@ -83,7 +83,7 @@ void AddDeviceCommand::execute() {
             // Yeni ID ve Isim ver
             clonedDevice->setId(newId);
             // Isimlerin karismamasi icin sonuna numara ekleyebiliriz veya ayni birakabiliriz
-            // Senaryoda "Light 2...10" diyor.
+            
             
             system->addDevice(clonedDevice);
             cout << "[BASARILI] " << name << " #" << newId << " (Kopyalandi/Cloned)\n";

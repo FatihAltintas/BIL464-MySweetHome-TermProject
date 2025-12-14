@@ -5,7 +5,7 @@
 
 class IMenuCommand {
 public:
-    // Destructor tanimi (Govdesi cpp'de)
+    // Destructor tanimi 
     virtual ~IMenuCommand();
     
     // Saf sanal fonksiyonlar (Arayuz)

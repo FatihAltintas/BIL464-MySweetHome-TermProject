@@ -12,7 +12,7 @@ public:
     StateCaretaker();
     ~StateCaretaker();
 
-    // MSHSystem ile uyumlu olmasi icin ismini 'saveState' yaptik
+    
     void saveState(HomeMemento* m);
     
     // Geri alma

@@ -1,5 +1,5 @@
 #include "PowerOnCommand.h"
-#include "Device.h" // Device fonksiyonlarini (powerOn) kullanmak icin
+#include "Device.h" 
 #include <iostream>
 #include <limits>
 

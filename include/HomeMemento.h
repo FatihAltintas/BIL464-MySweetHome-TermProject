@@ -5,7 +5,7 @@
 
 class HomeMemento {
 private:
-    ModeType mode; // Sadece modu sakliyoruz (Basit ve etkili)
+    ModeType mode; // Sadece modu sakliyoruz
 
 public:
     // Constructor: Durumu kaydeder

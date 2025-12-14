@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-// Header dosyasinda sadece "Benim boyle fonksiyonlarim var" diyoruz.
+
 class Light : public Device {
 private:
     int brightness;
@@ -22,8 +22,7 @@ public:
     void operate();
     void setBrightness(int b);
     
-    // Arkadasinin showInfo fonksiyonunu displayStatus ile birlestiriyoruz
-    // Boylece MSHSystem listeleme yaptiginda bu calisacak.
+    
     void displayStatus(); 
 };
 

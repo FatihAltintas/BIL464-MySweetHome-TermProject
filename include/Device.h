@@ -10,7 +10,7 @@
 class Device;
 
 // Observer Interface 
-// (Interface oldugu icin ve ici bos oldugu icin headerda kalmasi standarttir)
+
 class IObserver {
 public:
     virtual ~IObserver() {}
@@ -30,7 +30,7 @@ public:
     Device(const std::string& n);
     virtual ~Device();
 
-    // Saf sanal fonksiyonlar (Bunlarin cpp karsiligi alt siniflarda olur)
+    // Saf sanal fonksiyonlar
     virtual Device* clone() const = 0;
     virtual void operate() = 0;
 
@@ -39,7 +39,7 @@ public:
     virtual void powerOn();
     virtual void powerOff();
     
-    // MSHSystem'de hata veren o fonksiyonu ekledik!
+    
     virtual void displayStatus(); 
 
     // Getter & Setter
@@ -55,7 +55,7 @@ public:
     void detach(IObserver* observer);
     void notifyObservers();
     
-    // Elmar'in istegi (Dedektorler kapatilamaz)
+    
     virtual bool isCritical() const;
 };
 

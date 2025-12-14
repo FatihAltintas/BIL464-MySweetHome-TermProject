@@ -1,7 +1,7 @@
 #include "SimulateScenarioCommand.h"
 #include <iostream>
 #include <limits>
-#include <thread> // Bekleme efekti icin (opsiyonel, yoksa kaldirabilirsin)
+#include <thread> 
 #include <chrono>
 
 using namespace std;

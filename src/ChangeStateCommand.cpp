@@ -28,7 +28,7 @@ void ChangeStateCommand::execute() {
         switch (choice) {
             case 'N': 
                 cout << ">> State set to NORMAL.\n"; 
-                // Buraya Normal duruma gecis kodlari eklenebilir
+                
                 break;
             case 'H': 
                 cout << ">> State set to HIGH PERFORMANCE.\n"; 
@@ -38,7 +38,7 @@ void ChangeStateCommand::execute() {
                 break;
             case 'S': 
                 cout << ">> State set to SLEEP.\n"; 
-                // Sleep modu, sistem modunu da Evening yapabilir
+                
                 system->changeMode(MODE_EVENING); 
                 break;
             case 'P': 

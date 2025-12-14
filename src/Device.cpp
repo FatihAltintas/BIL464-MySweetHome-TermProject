@@ -42,7 +42,7 @@ void Device::powerOff() {
     }
 }
 
-// Durum Yazdirma (MSHSystem bunu ariyordu!)
+// Durum Yazdirma
 void Device::displayStatus() {
     string stateStr;
     switch (state) {

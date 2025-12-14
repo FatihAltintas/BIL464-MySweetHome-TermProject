@@ -23,7 +23,7 @@ string mshModeToString(ModeType mode) {
 // Constructor
 MSHSystem::MSHSystem() {
     caretaker = new StateCaretaker();
-    currentMode = MODE_NORMAL; // Guncellendi: Artik gercek enum ismini kullaniyoruz
+    currentMode = MODE_NORMAL; 
     Logger::getInstance()->log("MSH System Constructor called.");
 }
 
@@ -91,16 +91,15 @@ void MSHSystem::changeMode(ModeType newMode) {
     Logger::getInstance()->log("Changing mode from " + oldModeStr + " to " + newModeStr);
     
     // 1. Durumu Kaydet (Memento - Snapshot)
-    // Not: HomeMemento'nun constructor yapisina gore parametre gerekebilir.
-    // Simdilik sadece 'new HomeMemento(currentMode)' varsayiyoruz.
-    // Eger hata verirse HomeMemento.h dosyanin constructor'ina bakmamiz gerekir.
+    
+    
     HomeMemento* memento = new HomeMemento(currentMode); 
     caretaker->saveState(memento);
 
     // 2. Modu Guncelle
     currentMode = newMode;
     
-    // 3. Mod Mantigini Uygula (Arkadasinin Logic'i + Guncel Enumlar)
+    // 3. Mod Mantigini Uygula 
     for (size_t i = 0; i < devices.size(); ++i) {
         Device* d = devices[i];
         string n = d->getName(); 
@@ -142,7 +141,7 @@ void MSHSystem::restorePreviousMode() {
         cout << "Mode restored to: " << restoredMode << endl;
         Logger::getInstance()->log("Mode restored to: " + restoredMode);
         
-        delete memento; // Memento isimiz bitti, siliyoruz
+        delete memento;
     } else {
         cout << "No previous state to restore!" << endl;
     }

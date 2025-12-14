@@ -1,6 +1,5 @@
 #include "ForeignLight.h"
-#include "Logger.h" // Loglama yapalim ki calistigini gorelim
-
+#include "Logger.h" // Loglama
 using namespace std;
 
 ForeignLight::ForeignLight(const string& m) : model(m) {}

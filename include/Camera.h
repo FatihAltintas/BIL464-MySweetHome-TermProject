@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-// Header dosyasinda sadece tanimlar kaldi
+
 class Camera : public Device {
 public:
     Camera(const std::string& n, int i); // Constructor

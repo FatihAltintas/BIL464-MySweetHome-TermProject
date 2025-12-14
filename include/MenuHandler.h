@@ -4,7 +4,7 @@
 #include "IMenuCommand.h"
 #include <map>
 
-// Header'da 'using namespace std' kullanmiyoruz.
+
 class MenuHandler {
 private:
     std::map<int, IMenuCommand*> commands;

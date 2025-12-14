@@ -1,7 +1,6 @@
 #include "MSHMenuController.h"
 
-// Komutlarin headerlarini sadece burada (cpp) cagiriyoruz
-// Boylece bagimliliklari yonetmek kolaylasiyor.
+
 #include "ShowStatusCommand.h"
 #include "AddDeviceCommand.h"
 #include "RemoveDeviceCommand.h"
@@ -12,7 +11,7 @@
 #include "ShowManualCommand.h"
 #include "ShowAboutCommand.h"
 #include "CommandStubs.h" // Cikis komutu icin Stub
-#include "SimulateScenarioCommand.h" // <--- YENI: Acil durum simulasyonu icin eklendi
+#include "SimulateScenarioCommand.h"
 
 #include <iostream>
 #include <limits>
@@ -52,7 +51,7 @@ MSHMenuController::MSHMenuController(MSHSystem* sys) : isRunning(true), system(s
     menuHandler.registerCommand(10, new StubCommand("Cikis")); 
 
     // 11. Acil Durum Simulasyonu (YENI)
-    // Hocanin istedigi 'Manuel Test' ve 'Polis/Itfaiye' senaryolari burada
+    
     menuHandler.registerCommand(11, new SimulateScenarioCommand(system));
 }
 

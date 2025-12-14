@@ -1,5 +1,5 @@
 #include "ChangeModeCommand.h"
-#include "ModeManager.h" // MODE_NORMAL, MODE_CINEMA vb. enumlar burada
+#include "ModeManager.h" // MODE_NORMAL, MODE_CINEMA vb.
 #include <iostream>
 #include <limits>
 #include <cctype> // toupper fonksiyonu icin

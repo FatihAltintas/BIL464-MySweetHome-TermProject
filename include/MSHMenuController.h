@@ -4,7 +4,7 @@
 #include "MenuHandler.h"
 #include "MSHSystem.h"
 
-// Header dosyasinda 'using namespace std' kullanilmaz.
+
 class MSHMenuController {
 private:
     bool isRunning;

@@ -1,5 +1,5 @@
 #include "Light.h"
-#include "Logger.h" // Loglama icin
+#include "Logger.h" // Loglama
 
 using namespace std;
 

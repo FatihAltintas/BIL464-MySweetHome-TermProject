@@ -1,5 +1,5 @@
 #include "PowerOffCommand.h"
-#include "Device.h" // Device fonksiyonlarini kullanmak icin
+#include "Device.h" 
 #include <iostream>
 #include <limits>
 

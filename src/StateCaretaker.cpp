@@ -1,5 +1,5 @@
 #include "StateCaretaker.h"
-#include "Logger.h" // Loglama icin
+#include "Logger.h"
 
 using namespace std;
 

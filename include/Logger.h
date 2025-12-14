@@ -5,8 +5,7 @@
 #include <string>
 #include <fstream>
 
-// Header dosyasinda 'using namespace std' kullanmak risklidir.
-// O yuzden burada std:: kullaniyoruz.
+
 
 class Logger {
 private:

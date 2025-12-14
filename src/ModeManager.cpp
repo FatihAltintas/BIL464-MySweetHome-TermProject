@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// Header'da tanimlanan fonksiyonun govdesi burada
+
 string modeToString(ModeType m) {
     switch (m) {
         case MODE_NORMAL:  return "Normal";
